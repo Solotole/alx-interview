@@ -17,6 +17,7 @@ status_codes = {
 }
 line_count = 0
 
+
 def print_stats():
     """Print the current statistics."""
     print(f"File size: {total_size}")
@@ -24,10 +25,12 @@ def print_stats():
         if status_codes[code] > 0:
             print(f"{code}: {status_codes[code]}")
 
+
 def signal_handler(sig, frame):
     """Handle the keyboard interruption (CTRL + C) and print stats."""
     print_stats()
     sys.exit(0)
+
 
 # Setting the signal handler for keyboard interruption
 signal.signal(signal.SIGINT, signal_handler)
@@ -41,7 +44,7 @@ try:
 
         ip_address = parts[0]
         date = parts[3][1:]  # Stripping the '['
-        request = parts[5] + " " + parts[6] + " " + parts[7]  # "GET /projects/260 HTTP/1.1"
+        request = parts[5] + " " + parts[6] + " " + parts[7]
         status_code = parts[-2]
         file_size = parts[-1]
 
