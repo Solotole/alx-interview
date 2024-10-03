@@ -3,6 +3,7 @@
 solving the coin change problem
 """
 
+
 def makeChange(coins, total):
     """the coin change algorithm
     Args:
@@ -11,6 +12,8 @@ def makeChange(coins, total):
     Return:
         returns an integer of the number of change coins
     """
+    if total <= 0:
+        return 0
     length = len(coins)
     coins.sort(reverse=True)
     no_coins = []
@@ -21,7 +24,6 @@ def makeChange(coins, total):
                 break
             elif i * j == total:
                 break
-   
         if total != 0:
             no_coins.append(j)
             total = total - (i * j)
