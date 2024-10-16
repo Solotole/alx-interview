@@ -1,11 +1,8 @@
 #!/usr/bin/python3
-"""The Game Theory"""
 
 
 def isWinner(x, nums):
-    """finding the winner between 2"""
     def is_prime(num):
-        """finding if prime"""
         if num < 2:
             return False
         for i in range(2, int(num ** 0.5) + 1):
@@ -14,40 +11,34 @@ def isWinner(x, nums):
         return True
 
     def find_primes(n):
-        """finding prime numbers"""
         primes = []
         for i in range(2, n + 1):
             if is_prime(i):
                 primes.append(i)
         return primes
 
-    def get_winner(n):
-        """grtting the winner"""
-        primes = find_primes(n)
-        maria_turn = True
-        remaining = set(range(1, n + 1))
-
-        while primes:
-            prime = primes.pop(0)
-            if prime in remaining:
-                multiples = {i for i in range(prime, n + 1, prime)}
-                remaining -= multiples
-                if not remaining.intersection(primes):
-                    return "Maria" if maria_turn else "Ben"
-            maria_turn = not maria_turn
-        return "Ben"
-
-    maria_wins = 0
-    ben_wins = 0
-    for n in nums:
-        winner = get_winner(n)
-        if winner == "Maria":
-            maria_wins += 1
+    def get_winner(round_nums):
+        primes = find_primes(max(round_nums))
+        maria_wins = 0
+        for n in round_nums:
+            if n in primes:
+                maria_wins += 1
+        if maria_wins > len(round_nums) // 2:
+            return "Maria"
+        elif maria_wins < len(round_nums) // 2:
+            return "Ben"
         else:
-            ben_wins += 1
+            return None
+
+    winners = []
+    for round_nums in nums:
+        winners.append(get_winner(round_nums))
+
+    maria_wins = winners.count("Maria")
+    ben_wins = winners.count("Ben")
     if maria_wins > ben_wins:
         return "Maria"
-    elif ben_wins > maria_wins:
+    elif maria_wins < ben_wins:
         return "Ben"
     else:
         return None
