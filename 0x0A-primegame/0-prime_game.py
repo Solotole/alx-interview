@@ -1,37 +1,50 @@
 #!/usr/bin/python3
-"""Prime Game"""
+"""The Game Theory"""
 
 
 def isWinner(x, nums):
-    """the gamer theory algorithm
-    """
-    def sieve(n):
-        """sieving and determining if prime
-        """
-        primes = [True] * (n + 1)
-        p = 2
-        while (p * p <= n):
-            if primes[p]:
-                for i in range(p * p, n + 1, p):
-                    primes[i] = False
-            p += 1
-        return [p for p in range(2, n + 1) if primes[p]]
+    """finding the winner between 2"""
+    def is_prime(num):
+        """finding if prime"""
+        if num < 2:
+            return False
+        for i in range(2, int(num ** 0.5) + 1):
+            if num % i == 0:
+                return False
+        return True
 
-    max_n = max(nums)
-    primes_up_to_max_n = sieve(max_n)
-    prime_count = [0] * (max_n + 1)
-    for i in range(1, max_n + 1):
-        prime_count[i] = prime_count[i - 1]
-        if i in primes_up_to_max_n:
-            prime_count[i] += 1
+    def find_primes(n):
+        """finding prime numbers"""
+        primes = []
+        for i in range(2, n + 1):
+            if is_prime(i):
+                primes.append(i)
+        return primes
+
+    def get_winner(n):
+        """grtting the winner"""
+        primes = find_primes(n)
+        maria_turn = True
+        remaining = set(range(1, n + 1))
+
+        while primes:
+            prime = primes.pop(0)
+            if prime in remaining:
+                multiples = {i for i in range(prime, n + 1, prime)}
+                remaining -= multiples
+                if not remaining.intersection(primes):
+                    return "Maria" if maria_turn else "Ben"
+            maria_turn = not maria_turn
+        return "Ben"
+
     maria_wins = 0
     ben_wins = 0
     for n in nums:
-        if prime_count[n] % 2 == 1:
+        winner = get_winner(n)
+        if winner == "Maria":
             maria_wins += 1
         else:
             ben_wins += 1
-
     if maria_wins > ben_wins:
         return "Maria"
     elif ben_wins > maria_wins:
